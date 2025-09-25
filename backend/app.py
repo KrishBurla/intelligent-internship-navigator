@@ -37,7 +37,8 @@ def signup():
     password_hash = generate_password_hash(data['password'])
     
     conn = get_db_connection()
-    if not conn: return jsonify({"error": "Database connection failed"}), 500
+    if not conn: 
+        return jsonify({"error": "Database connection failed"}), 500
     cursor = conn.cursor()
     try:
         cursor.execute(
@@ -57,52 +58,62 @@ def login():
     data = request.get_json()
     if not data or not all(k in data for k in ('email', 'password')):
         return jsonify({"error": "Missing email or password"}), 400
-
+    
     conn = get_db_connection()
-    if not conn: return jsonify({"error": "Database connection failed"}), 500
+    if not conn: 
+        return jsonify({"error": "Database connection failed"}), 500
+    
     cursor = conn.cursor(dictionary=True)
     cursor.execute('SELECT * FROM users WHERE email = %s', (data['email'],))
     user = cursor.fetchone()
     cursor.close()
     conn.close()
-
+    
     if user and check_password_hash(user['password_hash'], data['password']):
         token = str(uuid.uuid4())
-        
-        # --- NEW LOGIC ---
-        # Check if the preference_tags field is filled
-        quiz_taken = bool(user['preference_tags']) 
-
         return jsonify({
             "message": "Login successful",
             "token": token,
             "name": user['name'],
             "profile_complete": user['profile_complete'],
-            "quiz_taken": quiz_taken # Return the quiz status
+            "quiz_taken": bool(user['internship_mode']) # A simple check if quiz was ever taken
         }), 200
         
     return jsonify({"error": "Invalid credentials"}), 401
 
-# --- ONBOARDING ENDPOINT ---
+# --- ONBOARDING & QUIZ SUBMISSION ---
 @app.route('/api/onboarding', methods=['POST'])
 def complete_onboarding():
+    # This endpoint now correctly calls and returns the result of the main quiz submission logic
+    return submit_quiz()
+
+@app.route('/api/quiz/submit', methods=['POST'])
+def submit_quiz():
     auth_header = request.headers.get('Authorization')
-    if not auth_header: return jsonify({"error": "Authorization token is missing"}), 401
+    if not auth_header: 
+        return jsonify({"error": "Authorization token is missing"}), 401
     
     data = request.get_json()
-    if not data or not all(k in data for k in ('education', 'field_of_study', 'skills', 'email')):
-        return jsonify({"error": "Missing onboarding data"}), 400
+    user_email = data.pop('email', None)
+    if not user_email: 
+        return jsonify({"error": "User email is missing"}), 400
+
+    columns, values = [], []
+    for key, value in data.items():
+        columns.append(f"{key} = %s")
+        values.append(", ".join(value) if isinstance(value, list) else value)
+    
+    columns.append("profile_complete = TRUE")
+    values.append(user_email)
+    
+    sql_query = f"UPDATE users SET {', '.join(columns)} WHERE email = %s"
 
     conn = get_db_connection()
+    if not conn: 
+        return jsonify({"error": "Database connection failed"}), 500
     cursor = conn.cursor()
     try:
-        cursor.execute(
-            """
-            UPDATE users SET education=%s, field_of_study=%s, skills=%s, profile_complete=TRUE
-            WHERE email=%s
-            """,
-            (data['education'], data['field_of_study'], data['skills'], data['email'])
-        )
+        cursor.execute(sql_query, tuple(values))
         conn.commit()
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -110,20 +121,23 @@ def complete_onboarding():
         cursor.close()
         conn.close()
         
-    return jsonify({"message": "Profile updated successfully"}), 200
+    return jsonify({"message": "Profile updated successfully!"}), 200
 
-# --- PROFILE ENDPOINTS (Updated GET to include preference_tags) ---
+
+# --- PROFILE ENDPOINTS ---
 @app.route('/api/profile', methods=['GET'])
 def get_profile():
     auth_header = request.headers.get('Authorization')
-    if not auth_header: return jsonify({"error": "Authorization token missing"}), 401
+    if not auth_header: 
+        return jsonify({"error": "Authorization token missing"}), 401
     
     user_email = request.args.get('email')
-    if not user_email: return jsonify({"error": "User email parameter is required"}), 400
+    if not user_email: 
+        return jsonify({"error": "User email is required"}), 400
     
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT name, email, education, field_of_study, skills, preference_tags FROM users WHERE email = %s', (user_email,))
+    cursor.execute('SELECT name, email, skills, highest_qualification, work_experience, work_experience_details, internet_access, languages, internship_mode, commitment, preferred_industries, preferred_tasks, stipend_requirement, stay_away, relocation, special_support, document_readiness, contact_consent FROM users WHERE email = %s', (user_email,))
     profile = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -135,79 +149,65 @@ def get_profile():
 @app.route('/api/profile', methods=['PUT'])
 def update_profile():
     auth_header = request.headers.get('Authorization')
-    if not auth_header: return jsonify({"error": "Authorization token missing"}), 401
+    if not auth_header: 
+        return jsonify({"error": "Authorization token missing"}), 401
+
     data = request.get_json()
-    if not data or not all(k in data for k in ('name', 'email', 'education', 'field_of_study', 'skills')):
-        return jsonify({"error": "Missing fields for profile update"}), 400
+    user_email = data.get('email')
+    columns, values = [], []
+    for key, value in data.items():
+        if key != 'email':
+             columns.append(f"{key} = %s")
+             values.append(value)
+    
+    values.append(user_email)
+
+    sql_query = f"UPDATE users SET {', '.join(columns)} WHERE email = %s"
+    
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute(
-            "UPDATE users SET name=%s, education=%s, field_of_study=%s, skills=%s WHERE email=%s",
-            (data['name'], data['education'], data['field_of_study'], data['skills'], data['email'])
-        )
+        cursor.execute(sql_query, tuple(values))
         conn.commit()
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
         conn.close()
+        
     return jsonify({"message": "Profile updated successfully"}), 200
 
-# --- RESUME ANALYSIS ENDPOINT ---
+# --- RESUME & INTERNSHIPS ---
 @app.route('/api/resume/upload', methods=['POST'])
 def upload_resume():
     auth_header = request.headers.get('Authorization')
-    if not auth_header: return jsonify({"error": "Authorization token is missing"}), 401
+    if not auth_header: 
+        return jsonify({"error": "Authorization token is missing"}), 401
 
     if 'resume' not in request.files:
         return jsonify({"error": "No resume file found"}), 400
     
-    time.sleep(2) # Simulate AI model processing time
+    time.sleep(2)
     
     return jsonify({
         "message": "Resume analyzed successfully",
         "extracted_skills": ["Python", "React", "Node.js", "SQL", "Project Management"]
     }), 200
 
-# --- QUIZ SUBMISSION ENDPOINT (UPDATED) ---
-@app.route('/api/quiz/submit', methods=['POST'])
-def submit_quiz():
-    auth_header = request.headers.get('Authorization')
-    if not auth_header: return jsonify({"error": "Authorization token missing"}), 401
-    
-    data = request.get_json()
-    if not data or not data.get('email') or not data.get('answers'):
-        return jsonify({"error": "Missing user email or answers"}), 400
-
-    user_email = data['email']
-    response_tags = ",".join(data['answers'])
-    
-    conn = get_db_connection()
-    if not conn: return jsonify({"error": "Database connection failed"}), 500
-    cursor = conn.cursor()
-    try:
-        # Update the user's profile directly with the preference tags
-        cursor.execute(
-            "UPDATE users SET preference_tags = %s WHERE email = %s",
-            (response_tags, user_email)
-        )
-        conn.commit()
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    finally:
-        cursor.close()
-        conn.close()
-    return jsonify({"message": "Quiz results saved successfully!"}), 200
-
-# --- INTERNSHIPS ENDPOINT ---
 @app.route('/api/internships')
 def get_internships():
     auth_header = request.headers.get('Authorization')
-    if not auth_header: return jsonify({"error": "Authorization token is missing"}), 401
-    with open('internships.json', 'r') as f:
-        internships_data = json.load(f)
-    return jsonify(internships_data)
+    if not auth_header: 
+        return jsonify({"error": "Authorization token is missing"}), 401
+    
+    try:
+        with open('internships.json', 'r', encoding='utf-8') as f:
+            internships_data = json.load(f)
+        return jsonify(internships_data)
+    except FileNotFoundError:
+        return jsonify({"error": "Internships data not found"}), 404
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
