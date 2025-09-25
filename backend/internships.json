@@ -6,13 +6,23 @@
     "logo": "https://placehold.co/100x100/7C3AED/FFFFFF?text=IA",
     "location": "Bengaluru, IN",
     "stipend": "₹35,000/month",
+    "duration": "3 Months",
+    "mode": "On-site",
     "matchScore": 92,
-    "technicalFit": 95,
-    "culturalFit": 88,
     "yourSkills": ["Python", "TensorFlow", "Data Analysis"],
     "missingSkills": ["PyTorch", "NLP"],
     "cultureTags": ["Fast-Paced", "Innovative", "Results-Driven"],
-    "description": "Join our cutting-edge AI team to work on real-world machine learning models. You will be responsible for data preprocessing, model training, and performance evaluation. A great opportunity to learn from industry experts.",
+    "description": "Join our cutting-edge AI team to work on real-world machine learning models. You will be responsible for data preprocessing, model training, and performance evaluation.",
+    "responsibilities": [
+      "Assist in developing and training machine learning models.",
+      "Process and analyze large datasets to extract meaningful insights.",
+      "Collaborate with the engineering team to deploy models."
+    ],
+    "qualifications": [
+      "Currently pursuing a degree in Computer Science or related field.",
+      "Strong understanding of fundamental ML algorithms.",
+      "Proficiency in Python and a major ML framework (TensorFlow, PyTorch)."
+    ],
     "companyInfo": "Innovate AI Corp is a leading startup in the artificial intelligence space, focusing on creating ethical and powerful AI solutions for businesses.",
     "applicationStatus": null
   },
@@ -23,13 +33,23 @@
     "logo": "https://placehold.co/100x100/F97316/FFFFFF?text=GS",
     "location": "Mumbai, IN",
     "stipend": "₹28,000/month",
+    "duration": "6 Months",
+    "mode": "Hybrid",
     "matchScore": 85,
-    "technicalFit": 80,
-    "culturalFit": 90,
     "yourSkills": ["Market Research", "Agile", "Communication"],
     "missingSkills": ["JIRA", "SQL"],
     "cultureTags": ["Collaborative", "User-Focused", "Creative"],
     "description": "As a Product Management Intern, you will work closely with our product and engineering teams to define features, conduct market research, and help shape the future of our flagship product.",
+    "responsibilities": [
+      "Conduct user interviews and market analysis.",
+      "Write detailed product requirement documents (PRDs).",
+      "Work with designers to create wireframes and mockups."
+    ],
+    "qualifications": [
+      "Pursuing an MBA or a degree in Business/Marketing.",
+      "Excellent communication and presentation skills.",
+      "A passion for technology and solving user problems."
+    ],
     "companyInfo": "Growth Solutions Ltd. helps businesses scale through innovative software products and marketing strategies. Our culture is all about teamwork and customer obsession.",
     "applicationStatus": "Applied"
   },
@@ -40,14 +60,78 @@
     "logo": "https://placehold.co/100x100/10B981/FFFFFF?text=DI",
     "location": "Remote",
     "stipend": "₹25,000/month",
+    "duration": "3 Months",
+    "mode": "Remote",
     "matchScore": 78,
-    "technicalFit": 88,
-    "culturalFit": 65,
     "yourSkills": ["SQL", "Excel", "Data Visualization"],
     "missingSkills": ["Tableau", "Python"],
     "cultureTags": ["Analytical", "Detail-Oriented", "Independent"],
-    "description": "We are looking for a detail-oriented Data Analyst Intern to help us make sense of large datasets. You will be creating dashboards, generating reports, and providing actionable insights to leadership.",
+    "description": "We are looking for a detail-oriented Data Analyst Intern to help us make sense of large datasets. You will be creating dashboards, generating reports, and providing actionable insights.",
+    "responsibilities": [
+      "Write complex SQL queries to extract data.",
+      "Create dashboards and reports in tools like Google Data Studio.",
+      "Present findings to stakeholders in a clear, concise manner."
+    ],
+    "qualifications": [
+      "Strong proficiency in SQL.",
+      "Experience with spreadsheet software (Excel, Google Sheets).",
+      "A keen eye for detail and a love for numbers."
+    ],
     "companyInfo": "DataDriven Insights is a consultancy that empowers companies to make better decisions through data. We value precision, clarity, and deep analytical thinking.",
+    "applicationStatus": "Under Review"
+  },
+  {
+    "id": 4,
+    "title": "Frontend Developer Intern",
+    "company": "PixelPerfect Studios",
+    "logo": "https://placehold.co/100x100/3B82F6/FFFFFF?text=PS",
+    "location": "Pune, IN",
+    "stipend": "₹32,000/month",
+    "duration": "4 Months",
+    "mode": "On-site",
+    "matchScore": 95,
+    "yourSkills": ["React", "JavaScript", "CSS"],
+    "missingSkills": ["TypeScript", "Next.js"],
+    "cultureTags": ["Creative", "Collaborative", "Detail-Oriented"],
+    "description": "Join our talented team of designers and developers to build beautiful, responsive, and user-friendly web interfaces. You will be working with React and modern CSS frameworks.",
+    "responsibilities": [
+      "Translate Figma designs into high-quality React components.",
+      "Ensure cross-browser compatibility and performance.",
+      "Collaborate with backend developers to integrate APIs."
+    ],
+    "qualifications": [
+      "Strong experience with React, HTML, and CSS.",
+      "Understanding of REST APIs.",
+      "A portfolio of projects showcasing your frontend skills."
+    ],
+    "companyInfo": "PixelPerfect Studios is a design and development agency known for its stunning visuals and intuitive user experiences.",
+    "applicationStatus": null
+  },
+  {
+    "id": 5,
+    "title": "Marketing Intern",
+    "company": "Connect Digital",
+    "logo": "https://placehold.co/100x100/EC4899/FFFFFF?text=CD",
+    "location": "Remote",
+    "stipend": "₹20,000/month",
+    "duration": "6 Months",
+    "mode": "Remote",
+    "matchScore": 72,
+    "yourSkills": ["Social Media", "Content Writing"],
+    "missingSkills": ["SEO", "Google Analytics"],
+    "cultureTags": ["Creative", "Fast-Paced", "Communicative"],
+    "description": "We are looking for a creative Marketing Intern to manage our social media channels, write compelling blog content, and assist with email marketing campaigns.",
+     "responsibilities": [
+      "Manage and grow our social media presence on various platforms.",
+      "Write and edit blog posts and website copy.",
+      "Assist in creating and analyzing email marketing campaigns."
+    ],
+    "qualifications": [
+      "Excellent writing and communication skills.",
+      "Familiarity with major social media platforms.",
+      "A desire to learn about digital marketing."
+    ],
+    "companyInfo": "Connect Digital is a full-service digital marketing agency that helps brands tell their stories and reach their audiences.",
     "applicationStatus": null
   }
 ]

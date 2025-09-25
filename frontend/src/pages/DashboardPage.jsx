@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Import Modals and Views
-import OnboardingModal from '../components/OnboardingModal';
-import ResumeAnalyzerModal from '../components/ResumeAnalyzerModal';
-import QuizModal from '../components/QuizModal';
-import DashboardView from '../views/DashboardView';
-import MyApplicationsView from '../views/MyApplicationsView';
-import AnnouncementsView from '../views/AnnouncementsView';
-import ProfileView from '../views/ProfileView';
+// Import Components using absolute paths from 'src'
+import OnboardingModal from 'components/OnboardingModal';
+import ResumeAnalyzerModal from 'components/ResumeAnalyzerModal';
+import QuizModal from 'components/QuizModal';
+import Footer from 'components/Footer';
+
+// Import Views using absolute paths from 'src'
+import DashboardView from 'views/DashboardView';
+import MyApplicationsView from 'views/MyApplicationsView';
+import AnnouncementsView from 'views/AnnouncementsView';
+import ProfileView from 'views/ProfileView';
 
 // --- ICONS for Layout ---
 const HomeIcon = (props) => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg> );
@@ -21,7 +24,7 @@ const MegaphoneIcon = (props) => ( <svg xmlns="http://www.w3.org/2000/svg" width
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
 
-// --- LAYOUT COMPONENTS (Defined at the top level for clarity) ---
+// --- LAYOUT COMPONENTS (Defined at the top level for stability) ---
 function Header({ userName }) {
     return (
         <header className="bg-white/90 backdrop-blur-lg sticky top-0 z-30 border-b border-gray-200">
@@ -119,7 +122,7 @@ export default function DashboardPage() {
         if (activeTab === 'dashboard' || activeTab === 'applications') {
             fetchInternships();
         } else {
-            setIsLoading(false); // No data to load for other tabs like Profile
+            setIsLoading(false);
         }
     }, [navigate, showOnboarding, activeTab, fetchInternships]);
 
@@ -140,7 +143,6 @@ export default function DashboardPage() {
         }
     };
     const handleSkipOnboarding = () => {
-        // We set this so the user isn't bothered again until they log out.
         localStorage.setItem('profileComplete', 'true');
         setShowOnboarding(false);
     };
@@ -162,7 +164,7 @@ export default function DashboardPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 font-sans">
+        <div className="min-h-screen bg-gray-100 font-sans flex flex-col">
             <OnboardingModal 
                 show={showOnboarding} 
                 onComplete={handleOnboardingComplete}
@@ -194,15 +196,18 @@ export default function DashboardPage() {
                 }} 
             />
             
-            <div className={`flex h-screen transition-all duration-500 ${showOnboarding || showResumeModal || showQuiz ? 'blur-lg pointer-events-none' : ''}`}>
+            <div className={`flex flex-1 overflow-hidden transition-all duration-500 ${showOnboarding || showResumeModal || showQuiz ? 'blur-lg pointer-events-none' : ''}`}>
                 <div className="hidden md:flex">
                     <Sidebar activeTab={activeTab} onNavClick={handleNavClick} onLogout={handleLogout} userName={userName} />
                 </div>
                 <div className="flex-1 flex flex-col overflow-hidden">
                     <Header userName={userName} />
-                    <main className="flex-1 overflow-y-auto">
-                        {renderContent()}
-                    </main>
+                    <div className="flex-1 overflow-hidden flex flex-col">
+                        <main className="flex-1 overflow-y-auto bg-gray-50">
+                            {renderContent()}
+                        </main>
+                        <Footer />
+                    </div>
                 </div>
             </div>
         </div>
