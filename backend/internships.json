@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "title": "AI/ML Intern",
+    "company": "Innovate AI Corp",
+    "logo": "https://placehold.co/100x100/7C3AED/FFFFFF?text=IA",
+    "location": "Bengaluru, IN",
+    "stipend": "₹35,000/month",
+    "matchScore": 92,
+    "technicalFit": 95,
+    "culturalFit": 88,
+    "yourSkills": ["Python", "TensorFlow", "Data Analysis"],
+    "missingSkills": ["PyTorch", "NLP"],
+    "cultureTags": ["Fast-Paced", "Innovative", "Results-Driven"],
+    "description": "Join our cutting-edge AI team to work on real-world machine learning models. You will be responsible for data preprocessing, model training, and performance evaluation. A great opportunity to learn from industry experts.",
+    "companyInfo": "Innovate AI Corp is a leading startup in the artificial intelligence space, focusing on creating ethical and powerful AI solutions for businesses.",
+    "applicationStatus": null
+  },
+  {
+    "id": 2,
+    "title": "Product Management Intern",
+    "company": "Growth Solutions Ltd.",
+    "logo": "https://placehold.co/100x100/F97316/FFFFFF?text=GS",
+    "location": "Mumbai, IN",
+    "stipend": "₹28,000/month",
+    "matchScore": 85,
+    "technicalFit": 80,
+    "culturalFit": 90,
+    "yourSkills": ["Market Research", "Agile", "Communication"],
+    "missingSkills": ["JIRA", "SQL"],
+    "cultureTags": ["Collaborative", "User-Focused", "Creative"],
+    "description": "As a Product Management Intern, you will work closely with our product and engineering teams to define features, conduct market research, and help shape the future of our flagship product.",
+    "companyInfo": "Growth Solutions Ltd. helps businesses scale through innovative software products and marketing strategies. Our culture is all about teamwork and customer obsession.",
+    "applicationStatus": "Applied"
+  },
+  {
+    "id": 3,
+    "title": "Data Analyst Intern",
+    "company": "DataDriven Insights",
+    "logo": "https://placehold.co/100x100/10B981/FFFFFF?text=DI",
+    "location": "Remote",
+    "stipend": "₹25,000/month",
+    "matchScore": 78,
+    "technicalFit": 88,
+    "culturalFit": 65,
+    "yourSkills": ["SQL", "Excel", "Data Visualization"],
+    "missingSkills": ["Tableau", "Python"],
+    "cultureTags": ["Analytical", "Detail-Oriented", "Independent"],
+    "description": "We are looking for a detail-oriented Data Analyst Intern to help us make sense of large datasets. You will be creating dashboards, generating reports, and providing actionable insights to leadership.",
+    "companyInfo": "DataDriven Insights is a consultancy that empowers companies to make better decisions through data. We value precision, clarity, and deep analytical thinking.",
+    "applicationStatus": null
+  }
+]
