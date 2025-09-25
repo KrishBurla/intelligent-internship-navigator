@@ -143,7 +143,8 @@ export default function ProfileView({ onOpenResumeModal, onRetakeQuiz }) {
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Highest Education</label>
-                            <input type="text" name="education" value={profile.education || ''} onChange={handleInputChange} className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md"/>
+                            {/* --- CHANGE: Use 'highest_qualification' --- */}
+                            <input type="text" name="highest_qualification" value={profile.highest_qualification || ''} onChange={handleInputChange} className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md"/>
                         </div>
                     </div>
                     <div className="space-y-6">

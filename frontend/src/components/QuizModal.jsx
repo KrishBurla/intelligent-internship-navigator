@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // --- (Icons are the same as before) ---
-const LoaderIcon = (props) => (<svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" {...props}><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>);
+const LoaderIcon = (props) => (<svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24" {...props}><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>);
 
 // --- NEW QUIZ QUESTIONS DATA STRUCTURE ---
 const quizQuestions = [
@@ -74,6 +74,17 @@ export default function QuizModal({ show, onClose }) {
     const currentQuestion = quizQuestions[currentQuestionIndex];
     const currentAnswer = answers[currentQuestion.id];
     const isAnswered = Array.isArray(currentAnswer) ? currentAnswer.length > 0 : !!currentAnswer;
+    
+    // --- CHANGE: More specific condition for showing the textbox ---
+    const shouldShowSpecifyText = (question, option) => {
+        if (question.type !== 'single-choice-specify' || currentAnswer !== option) {
+            return false;
+        }
+        // Only show for options that contain "Other" or specific keywords
+        const keywords = ['Other', 'apprenticeship', 'certificate'];
+        return keywords.some(keyword => option.includes(keyword));
+    };
+
 
     return (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -90,7 +101,7 @@ export default function QuizModal({ show, onClose }) {
                                     className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${ (Array.isArray(currentAnswer) && currentAnswer.includes(option)) || currentAnswer === option ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500' : 'bg-gray-100 border-transparent hover:border-blue-400'}`}>
                                     {option}
                                 </button>
-                                {(currentQuestion.type === 'single-choice-specify' && currentAnswer === option && (option.includes('Other') || option.includes('apprenticeship') || option.includes('certificate'))) && (
+                                {shouldShowSpecifyText(currentQuestion, option) && (
                                     <input type="text" placeholder="Please specify..." onChange={(e) => handleTextChange(currentQuestion.id, e.target.value)} className="w-full mt-2 p-2 border border-gray-300 rounded-md" />
                                 )}
                             </div>

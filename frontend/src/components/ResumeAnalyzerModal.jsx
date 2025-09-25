@@ -36,7 +36,8 @@ export default function ResumeAnalyzerModal({ show, onClose, onAnalysisComplete 
             if (!response.ok) throw new Error(data.error);
             setAnalysisResult(data);
             if (onAnalysisComplete) {
-                onAnalysisComplete(data.extracted_skills); // Callback to update profile page
+                // --- CHANGE: Pass the entire data object ---
+                onAnalysisComplete(data); 
             }
         } catch (err) { setError(err.message); } finally { setIsUploading(false); }
     };
@@ -63,7 +64,8 @@ export default function ResumeAnalyzerModal({ show, onClose, onAnalysisComplete 
                              <h4 className="font-semibold text-green-800">Analysis Complete</h4>
                              <p className="text-sm text-green-700 mt-2">We extracted the following skills:</p>
                              <div className="flex flex-wrap gap-2 mt-2">
-                                {analysisResult.extracted_skills.map(skill => <span key={skill} className="px-2 py-1 text-xs font-medium text-green-800 bg-green-200 rounded-full">{skill}</span>)}
+                                {/* --- CHANGE: Use 'skills' from the new structure --- */}
+                                {analysisResult.skills.map(skill => <span key={skill} className="px-2 py-1 text-xs font-medium text-green-800 bg-green-200 rounded-full">{skill}</span>)}
                              </div>
                         </div>
                     )}
