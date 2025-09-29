@@ -2,9 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 // --- Icons ---
-const UploadCloudIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>);
-const LoaderIcon = (props) => (<svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24" {...props}><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>);
-const XIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>);
+const UploadCloudIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>);
+const LoaderIcon = (props) => (<svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" {...props}><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>);
+const XIcon = (props) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>);
 
 export default function ResumeAnalyzerModal({ show, onClose, onAnalysisComplete }) {
     const [resumeFile, setResumeFile] = useState(null);
@@ -36,7 +36,6 @@ export default function ResumeAnalyzerModal({ show, onClose, onAnalysisComplete 
             if (!response.ok) throw new Error(data.error);
             setAnalysisResult(data);
             if (onAnalysisComplete) {
-                // --- CHANGE: Pass the entire data object ---
                 onAnalysisComplete(data); 
             }
         } catch (err) { setError(err.message); } finally { setIsUploading(false); }
@@ -64,7 +63,6 @@ export default function ResumeAnalyzerModal({ show, onClose, onAnalysisComplete 
                              <h4 className="font-semibold text-green-800">Analysis Complete</h4>
                              <p className="text-sm text-green-700 mt-2">We extracted the following skills:</p>
                              <div className="flex flex-wrap gap-2 mt-2">
-                                {/* --- CHANGE: Use 'skills' from the new structure --- */}
                                 {analysisResult.skills.map(skill => <span key={skill} className="px-2 py-1 text-xs font-medium text-green-800 bg-green-200 rounded-full">{skill}</span>)}
                              </div>
                         </div>
