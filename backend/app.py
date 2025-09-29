@@ -2,7 +2,8 @@
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import mysql.connector
+import psycopg2
+import psycopg2.extras
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
@@ -29,10 +30,11 @@ db_config = {
 
 def get_db_connection():
     try:
-        conn = mysql.connector.connect(**db_config)
+        # This will connect using the DATABASE_URL environment variable
+        conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
         return conn
-    except mysql.connector.Error as err:
-        print(f"Error connecting to MySQL: {err}")
+    except Exception as err:
+        print(f"Error connecting to PostgreSQL: {err}")
         return None
 
 # --- AUTHENTICATION ENDPOINTS (No changes) ---
@@ -44,7 +46,7 @@ def signup():
     password_hash = generate_password_hash(data['password'])
     conn = get_db_connection()
     if not conn: return jsonify({"error": "Database connection failed"}), 500
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     try:
         cursor.execute(
             'INSERT INTO users (name, email, password_hash) VALUES (%s, %s, %s)',
@@ -65,9 +67,10 @@ def login():
         return jsonify({"error": "Missing email or password"}), 400
     conn = get_db_connection()
     if not conn: return jsonify({"error": "Database connection failed"}), 500
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cursor.execute('SELECT * FROM users WHERE email = %s', (data['email'],))
-    user = cursor.fetchone()
+    user_row = cursor.fetchone()
+    user = dict(user_row) if user_row else None
     cursor.close()
     conn.close()
     if user and check_password_hash(user['password_hash'], data['password']):
@@ -121,7 +124,7 @@ def get_profile():
     user_email = request.args.get('email')
     if not user_email: return jsonify({"error": "User email is required"}), 400
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cursor.execute('SELECT name, email, skills, highest_qualification, field_of_study, work_experience, work_experience_details, internet_access, languages, internship_mode, commitment, preferred_industries, preferred_tasks, stipend_requirement, stay_away, relocation, special_support, document_readiness, contact_consent FROM users WHERE email = %s', (user_email,))
     profile = cursor.fetchone()
     cursor.close()
