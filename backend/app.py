@@ -21,10 +21,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # --- MySQL DATABASE CONFIGURATION ---
 db_config = {
-    'host': '127.0.0.1',
-    'user': 'root',
-    'password': 'root',
-    'database': 'internship_navigator_db'
+    'host': os.environ.get('DB_HOST'),
+    'user': os.environ.get('DB_USER'),
+    'password': os.environ.get('DB_PASSWORD'),
+    'database': os.environ.get('DB_DATABASE')
 }
 
 def get_db_connection():

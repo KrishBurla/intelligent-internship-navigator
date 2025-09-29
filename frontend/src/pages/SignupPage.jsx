@@ -49,8 +49,7 @@ export default function SignupPage() {
         if (!isFormValid()) { setError("Please fill all fields and meet password requirements."); return; }
         setError('');
         try {
-            const response = await fetch('http://127.0.0.1:5000/api/signup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) });
-            const data = await response.json();
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/signup`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) });            const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'Failed to create account.');
             navigate('/login');
         } catch (err) { setError(err.message); }

@@ -54,7 +54,7 @@ export default function QuizModal({ show, onClose }) {
         try {
             const token = localStorage.getItem('authToken');
             const email = localStorage.getItem('userEmail');
-            const response = await fetch('http://127.0.0.1:5000/api/quiz/submit', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/quiz/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ ...answers, email }),

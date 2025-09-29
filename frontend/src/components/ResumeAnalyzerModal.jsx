@@ -27,7 +27,7 @@ export default function ResumeAnalyzerModal({ show, onClose, onAnalysisComplete 
         uploadData.append('resume', resumeFile);
         try {
             const token = localStorage.getItem('authToken');
-            const response = await fetch('http://127.0.0.1:5000/api/resume/upload', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/upload`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: uploadData,
